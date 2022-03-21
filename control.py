@@ -33,7 +33,7 @@ def sandbox(t):
 
     return targets
 # Dimensions (mm)
-l0, l1, l2 = 0.045, 0.065, 0.087
+l0, l1, l2 = 0.041, 0.065, 0.087
 
 def forward_kinematics(alpha, beta, gamma):
     """Prend en entrée les angles moteurs et produit la position atteinte"""
@@ -81,9 +81,9 @@ def inverse(x, y, z):
     - Sortie: un tableau contenant les 3 positions angulaires cibles (en radians)
     """
 
-    a=-z/(math.sqrt( (math.sqrt(x**2 + y**2) - l0**2)**2 + z**2  ))
+    a=-z/(math.sqrt( (math.sqrt(x**2 + y**2) - l0)**2 + z**2  ))
     b=(l1**2 - l2**2 + ( math.sqrt(x**2 + y**2) - l0 )**2 + z**2 )/(2*l1*(math.sqrt( (  math.sqrt(x**2 +y**2) - l0 )**2  + z**2 ))) 
-    c=( l1**2 + l2**2 - ( math.sqrt(x**2 + y**2) - l0 )**2 + z**2)/ (2*l1*l2) 
+    c=( l1**2 + l2**2 - ( math.sqrt(x**2 + y**2) - l0 )**2 -(z**2)) / (2*l1*l2)
     a=normalise(a)
     b=normalise(b)
     c=normalise(c)
@@ -105,7 +105,7 @@ def draw(t):
     - Sortie: un tableau contenant les 3 positions angulaires cibles (en radians)
     """
 
-    return [math.atan2(y,x), np.sin(t)*0.3, 0.]
+    return [0.,0., 0.]
 
 def legs(leg1, leg2, leg3, leg4):
     """
