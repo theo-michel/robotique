@@ -104,8 +104,10 @@ def draw(t):
     - Entrée: t, le temps (secondes écoulées depuis le début)
     - Sortie: un tableau contenant les 3 positions angulaires cibles (en radians)
     """
-
-    return [0.,0., 0.]
+    z = 0
+    y = 0.01 *t 
+    x = 0.01 * t
+    return inverse(x,y,z)
 
 def legs(leg1, leg2, leg3, leg4):
     """
