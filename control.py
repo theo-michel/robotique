@@ -1,6 +1,8 @@
 from cmath import acos
 import math
 import numpy as np
+from interpolation import LinearSpline
+from interpolation import LinearSpline3D
 
 def sandbox(t):
     """
@@ -92,6 +94,8 @@ def inverse(x, y, z):
     teta2 = math.pi - math.acos( c   )
     return [teta0,teta1, teta2]
 
+
+
 def draw(t):
     """
     python simulator.py -m draw
@@ -104,10 +108,14 @@ def draw(t):
     - Entrée: t, le temps (secondes écoulées depuis le début)
     - Sortie: un tableau contenant les 3 positions angulaires cibles (en radians)
     """
-    z = 0
-    y = 0.01 *t 
-    x = 0.01 * t
-    return inverse(x,y,z)
+    spline = LinearSpline3D()
+    spline.add_entry(0,0, 0, 0)
+    spline.add_entry(1,2, 0, 0)
+    spline.add_entry(2,0, 2, 0)
+    r = spline.interpolate(t)
+
+    return inverse(r[0],r[1],r[2])
+    
 
 def legs(leg1, leg2, leg3, leg4):
     """
