@@ -95,6 +95,11 @@ def inverse(x, y, z):
     return [teta0,teta1, teta2]
 
 
+spline = LinearSpline3D()
+spline.add_entry(0, 0.14, -0.05, 0)
+spline.add_entry(2, 0.14, 0.0, 0.05)
+spline.add_entry(4, 0.14, 0.05, 0)
+spline.add_entry(6, 0.14, -0.05, 0)
 
 def draw(t):
     """
@@ -108,11 +113,8 @@ def draw(t):
     - Entrée: t, le temps (secondes écoulées depuis le début)
     - Sortie: un tableau contenant les 3 positions angulaires cibles (en radians)
     """
-    spline = LinearSpline3D()
-    spline.add_entry(0,0, 0, 0)
-    spline.add_entry(1,2, 0, 0)
-    spline.add_entry(2,0, 2, 0)
-    r = spline.interpolate(t)
+    print(t)
+    r = spline.interpolate(t % 6)
 
     return inverse(r[0],r[1],r[2])
     

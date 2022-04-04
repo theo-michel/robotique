@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class LinearSpline:
@@ -38,7 +37,7 @@ class LinearSpline3D:
         """
         values = self.values
         for i in range(len(values)-1):
-            if (values[i][0]<t<=    values[i+1][0]):
+            if (values[i][0]<t<=values[i+1][0]):
                 x1 = values[i][1]
                 x2 = values[i+1][1]
                 y1 = values[i][2]
@@ -48,20 +47,27 @@ class LinearSpline3D:
                 t1 = values[i][0]
                 t2 = values[i+1][0]
                 return  x1 + (t-t1)*(x2-x1)/(t2-t1), y1 + (t-t1)*(y2-y1)/(t2-t1), z1 + (t-t1)*(z2-z1)/(t2-t1)
-        return 0,0,0
+        if t>values[-1][0]:
+            return values[-1][1], values[-1][2], values[-1][3]
+        elif t<values[0][0]:
+            return values[0][1], values[0][2], values[0][3]
+        else:
+            return 0,0,0
+                
         
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
     
-    spline = LinearSpline()
-    spline.add_entry(0., 0.)
-    spline.add_entry(0.5, 0.2)
-    spline.add_entry(1.5, 0.)
-    spline.add_entry(2.3, 0.6)
+    spline = LinearSpline3D()
+    spline.add_entry(0., 0., 1., 2.)
+    spline.add_entry(0.5, 0.2, 3., -2.)
+    spline.add_entry(1.5, 0., 5., -2.)
+    spline.add_entry(2.3, 0.6, 0., 0.1)
 
-    xs = np.arange(-0.1, 2.5, 0.1)
-    ys = []
-    for x in xs:
-        ys.append(spline.interpolate(x))
+    ts = np.arange(-0.1, 2.5, 0.01)
+    xyzs = np.array([spline.interpolate(t) for t in ts])
 
-    plt.plot(xs, ys)
+    plt.scatter(ts, xyzs.T[0])
+    plt.scatter(ts, xyzs.T[1])
+    plt.scatter(ts, xyzs.T[2])
     plt.show()
