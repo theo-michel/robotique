@@ -3,6 +3,7 @@ import math
 import numpy as np
 from interpolation import LinearSpline
 from interpolation import LinearSpline3D
+import coordinate_change as cc
 
 def sandbox(t):
     """
@@ -129,11 +130,31 @@ def legs(leg1, leg2, leg3, leg4):
     - Entrée: des positions cibles (tuples (x, y, z)) pour le bout des 4 pattes
     - Sortie: un tableau contenant les 12 positions angulaires cibles (radian) pour les moteurs
     """
+    
+    alpha1=-3*math.pi/4
+    alpha2=3*math.pi/4
+    alpha3=math.pi/4
+    alpha4=-math.pi/4
+    T=np.array([-0.04,0,0])
+    leg1_n = cc.change_coordinate_x(alpha1,T,leg1)
+    leg2_n = cc.change_coordinate_x(alpha2,T,leg2)
+    leg3_n = cc.change_coordinate_x(alpha3,T,leg3)
+    leg4_n = cc.change_coordinate_x(alpha4,T,leg4)
 
-    targets = [0]*12
+    thetas_1=inverse(leg1_n[0],leg1_n[1],leg1_n[2])
+    thetas_2=inverse(leg2_n[0],leg2_n[1],leg2_n[2])
+    thetas_3=inverse(leg3_n[0],leg3_n[1],leg3_n[2])
+    thetas_4=inverse(leg4_n[0],leg4_n[1],leg4_n[2])    
 
-    return targets
+    return [thetas_1[0],thetas_1[1],thetas_1[2],thetas_2[0],thetas_2[1],thetas_2[2],thetas_3[0],thetas_3[1],thetas_3[2],thetas_4[0],thetas_4[1],thetas_4[2]]
 
+
+
+spline = LinearSpline3D()
+spline.add_entry(0, 0.14, -0.05, 0)
+spline.add_entry(2, 0.14, 0.0, 0.05)
+spline.add_entry(4, 0.14, 0.05, 0)
+spline.add_entry(6, 0.14, -0.05, 0)
 def walk(t, speed_x, speed_y, speed_rotation):
     """
     python simulator.py -m walk
@@ -146,8 +167,22 @@ def walk(t, speed_x, speed_y, speed_rotation):
     - Sortie: un tableau contenant les 12 positions angulaires cibles (radian) pour les moteurs
     """
     targets = [0]*12
+    # x=speed_x*t
+    # y=speed_y*t
+    z=0
+    # alpha=speed_rotation*t
+    # beta=0
+    # gamma=0
+    # leg1 = [x,y,z]
+    # leg2 = [x,y,z]
+    # leg3 = [x,y,z]
+    # leg4 = [x,y,z]
 
-    return targets
+    # targets = legs(leg1, leg2, leg3, leg4)
+
+    # r = spline.interpolate(t % 6)
+
+    # return inverse(r[0],r[1],r[2])
 
 if __name__ == "__main__":
     print("N'exécutez pas ce fichier, mais simulator.py")
