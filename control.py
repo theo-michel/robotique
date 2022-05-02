@@ -135,7 +135,7 @@ def legs(leg1, leg2, leg3, leg4):
     alpha2=3*math.pi/4
     alpha3=math.pi/4
     alpha4=-math.pi/4
-    T=np.array([-0.04,0,0])
+    T=np.array([-0.04,0,0])#translation
     leg1_n = cc.change_coordinate_x(alpha1,T,leg1)
     leg2_n = cc.change_coordinate_x(alpha2,T,leg2)
     leg3_n = cc.change_coordinate_x(alpha3,T,leg3)
@@ -150,11 +150,31 @@ def legs(leg1, leg2, leg3, leg4):
 
 
 
-spline = LinearSpline3D()
-spline.add_entry(0, 0.14, -0.05, 0)
-spline.add_entry(2, 0.14, 0.0, 0.05)
-spline.add_entry(4, 0.14, 0.05, 0)
-spline.add_entry(6, 0.14, -0.05, 0)
+spline1 = LinearSpline3D()
+spline1.add_entry(0, 0.14, -0.05, 0)
+spline1.add_entry(2, 0.14, 0.05, 0.05)
+spline1.add_entry(4, 0.14, 0.1, 0)
+spline1.add_entry(6, 0.14, -0.05, 0)
+
+spline2 = LinearSpline3D()
+spline2.add_entry(0, -0.14, -0.05, 0)
+spline2.add_entry(2, -0.14, 0.05, 0.05)
+spline2.add_entry(4, -0.14, 0.1, 0)
+spline2.add_entry(6, -0.14, -0.05, 0)
+
+spline3 = LinearSpline3D()
+spline3.add_entry(0, 0.14, 0.05, 0)
+spline3.add_entry(2, 0.14, 0.05, 0.05)
+spline3.add_entry(4, 0.14, 0.1, 0)
+spline3.add_entry(6, 0.14, -0.05, 0)
+
+spline4 = LinearSpline3D()
+spline4.add_entry(0, 0.14, -0.05, 0)
+spline4.add_entry(2, 0.14, 0.05, 0.05)
+spline4.add_entry(4, 0.14, 0.1, 0)
+spline4.add_entry(6, 0.14, -0.05, 0)
+
+
 def walk(t, speed_x, speed_y, speed_rotation):
     """
     python simulator.py -m walk
@@ -166,23 +186,10 @@ def walk(t, speed_x, speed_y, speed_rotation):
             speed_x, speed_y, et speed_rotation, vitesses cibles contrôlées par les sliders
     - Sortie: un tableau contenant les 12 positions angulaires cibles (radian) pour les moteurs
     """
-    targets = [0]*12
-    # x=speed_x*t
-    # y=speed_y*t
-    z=0
-    # alpha=speed_rotation*t
-    # beta=0
-    # gamma=0
-    # leg1 = [x,y,z]
-    # leg2 = [x,y,z]
-    # leg3 = [x,y,z]
-    # leg4 = [x,y,z]
-
-    # targets = legs(leg1, leg2, leg3, leg4)
-
-    # r = spline.interpolate(t % 6)
-
-    # return inverse(r[0],r[1],r[2])
+    r = spline2.interpolate(t % 6)
+    print(r)
+    angles = legs(r,r,r,r)
+    return angles
 
 if __name__ == "__main__":
     print("N'exécutez pas ce fichier, mais simulator.py")
